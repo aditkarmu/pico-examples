@@ -7,17 +7,31 @@
 #include "pico/stdlib.h"
 
 int main() {
-#ifndef PICO_DEFAULT_LED_PIN
-#warning blink example requires a board with a regular LED
-#else
-    const uint LED_PIN = PICO_DEFAULT_LED_PIN;
-    gpio_init(LED_PIN);
-    gpio_set_dir(LED_PIN, GPIO_OUT);
+    const uint LED_PIN_L = 15;
+    const uint LED_PIN_R = 16;
+    bool L_STATE = true;
+    bool R_STATE = true;
+    gpio_init(LED_PIN_L);
+    gpio_set_dir(LED_PIN_L, GPIO_OUT);
+    gpio_init(LED_PIN_R);
+    gpio_set_dir(LED_PIN_R, GPIO_OUT);
     while (true) {
-        gpio_put(LED_PIN, 1);
-        sleep_ms(250);
-        gpio_put(LED_PIN, 0);
-        sleep_ms(250);
+        for (int i = 0; i < 3; i++) {
+            if (i < 2) {
+                gpio_put(LED_PIN_L, L_STATE);
+                sleep_ms(500);
+                L_STATE = !L_STATE;
+                gpio_put(LED_PIN_L, L_STATE);
+                sleep_ms(500);
+                L_STATE = !L_STATE;
+            } else {
+                gpio_put(LED_PIN_R, R_STATE);
+                sleep_ms(500);
+                R_STATE = !R_STATE;
+                gpio_put(LED_PIN_R, R_STATE);
+                sleep_ms(500);
+                R_STATE = !R_STATE;
+            }
+        }
     }
-#endif
 }
